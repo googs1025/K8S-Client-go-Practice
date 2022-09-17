@@ -18,7 +18,7 @@ func TestDeployment(t *testing.T) {
 	GetPod(ctx, client, "default", "stress-pod")
 	GetDeployment(ctx, client, "default", "webapp")
 	GetDeploymentList(ctx, client, "default")
-
+	CreateDeploy(ctx, client, "default", 3, "nginx333333", 80)
 
 }
 
