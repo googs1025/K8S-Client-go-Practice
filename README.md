@@ -1,8 +1,9 @@
 # K8S-Client-go-Practice
 
-##基于kubernetes中的client-go接口调用各类api资源，并封装。
+## 基于kubernetes中的client-go接口调用各类api资源，并封装。
 
-##预计提供接口：
+## 预计提供接口：
+
 1.CreateDeployment: 创建deployment
 
 2.DeleteDeployment: 删除deployment
