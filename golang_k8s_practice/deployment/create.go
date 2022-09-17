@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-func CreateDeploy(ctx context.Context, client *kubernetes.Clientset, namespace string, useReplicas int32, deployname string, useTargetport int32) {
+func CreateDeployment(ctx context.Context, client *kubernetes.Clientset, namespace string, useReplicas int32, deployname string, useTargetport int32) {
 	var replicas = useReplicas
 	var targetPort = useTargetport
 	intString := intstr.IntOrString{
