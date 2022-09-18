@@ -23,7 +23,8 @@ func TestDeployment(t *testing.T) {
 	fmt.Println("-----------------------------------------------")
 	GetDeploymentList(ctx, client, "default")
 	fmt.Println("-----------------------------------------------")
-	CreateDeployment(ctx, client, "default", 3, "nginx333333", 80)
-
+	CreateDeploymentService(ctx, client, "default", 3, "nginx333333", 80)
+	fmt.Println("-----------------------------------------------")
+	CreateNamespace(ctx, client, "create-test")
 }
 
