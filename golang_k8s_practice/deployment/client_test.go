@@ -2,6 +2,7 @@ package deployment
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"testing"
 )
@@ -15,9 +16,13 @@ func TestDeployment(t *testing.T) {
 		log.Println(err)
 	}
 	GetPodsList(ctx, client, "default")
+	fmt.Println("-----------------------------------------------")
 	GetPod(ctx, client, "default", "stress-pod")
+	fmt.Println("-----------------------------------------------")
 	GetDeployment(ctx, client, "default", "webapp")
+	fmt.Println("-----------------------------------------------")
 	GetDeploymentList(ctx, client, "default")
+	fmt.Println("-----------------------------------------------")
 	CreateDeployment(ctx, client, "default", 3, "nginx333333", 80)
 
 }

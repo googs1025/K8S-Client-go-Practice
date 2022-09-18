@@ -5,6 +5,7 @@ import (
 	"fmt"
 	appV1 "k8s.io/api/apps/v1"
 	coreV1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metaV1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes"
@@ -35,7 +36,7 @@ func CreateDeployment(ctx context.Context, client *kubernetes.Clientset, namespa
 			},
 			Template: coreV1.PodTemplateSpec{
 				ObjectMeta: metaV1.ObjectMeta{
-					Name: "",
+					Name: "aaaa",
 					Labels: map[string]string{
 						"app": "nginx",
 					},
@@ -47,7 +48,7 @@ func CreateDeployment(ctx context.Context, client *kubernetes.Clientset, namespa
 							Image: "nginx:1.16.1",
 							Ports: []coreV1.ContainerPort{
 								{
-									Name: "http_nginx",
+									Name: "http",
 									Protocol: coreV1.ProtocolTCP,
 									ContainerPort: 80,
 								},
@@ -61,7 +62,7 @@ func CreateDeployment(ctx context.Context, client *kubernetes.Clientset, namespa
 
 	service := &coreV1.Service{
 		ObjectMeta: metaV1.ObjectMeta{
-			Name: "nginx111111133",
+			Name: deployname,
 			Labels: map[string]string{
 				"app": "nginx",
 			},
@@ -86,15 +87,42 @@ func CreateDeployment(ctx context.Context, client *kubernetes.Clientset, namespa
 		},
 	}
 
-	deployments, err := client.AppsV1().Deployments(namespace).Create(ctx, deployment, metaV1.CreateOptions{})
-	if err != nil {
-		log.Println(err)
+	if _, err := client.AppsV1().Deployments(namespace).Get(ctx, deployname, metaV1.GetOptions{}); err != nil {
+
+		if !errors.IsNotFound(err) {
+			log.Println(err)
+			return
+		}
+
+		if deployments, err := client.AppsV1().Deployments(namespace).Create(ctx, deployment, metaV1.CreateOptions{}); err != nil {
+			log.Println(err)
+		} else {
+			fmt.Println("Deployment已成功被建立:", deployments.Name)
+
+		}
+
+
+
+	} else {
+		fmt.Println("此deployment已经存在，无法建立！")
 	}
-	fmt.Println("Deployment已成功被建立:", deployments.Name)
-	service, err = client.CoreV1().Services(namespace).Create(ctx, service, metaV1.CreateOptions{})
-	if err != nil {
-		log.Println(err)
+
+
+	if _, err := client.CoreV1().Services(namespace).Get(ctx, deployname, metaV1.GetOptions{}); err != nil {
+		if !errors.IsNotFound(err) {
+			log.Println(err)
+			return
+		}
+
+		if service, err := client.CoreV1().Services(namespace).Create(ctx, service, metaV1.CreateOptions{}); err != nil {
+			log.Println(err)
+		} else {
+			fmt.Println("Service已成功建立:", service.Name)
+		}
+	} else {
+		fmt.Println("此service已经存在，无法建立！")
 	}
-	fmt.Println("Service已成功建立:", service.Name)
+
+
 
 }
