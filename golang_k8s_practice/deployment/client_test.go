@@ -3,7 +3,6 @@ package deployment
 import (
 	"context"
 	"fmt"
-	"log"
 	"testing"
 	"time"
 )
@@ -12,10 +11,9 @@ func TestDeployment(t *testing.T) {
 
 	ctx := context.Background()
 
-	client, err := GetClientSet()
-	if err != nil {
-		log.Println(err)
-	}
+	client, _ := GetClientSet()
+	//client := K8sClient
+
 	GetPodsList(ctx, client, "default")
 	fmt.Println("-----------------------------------------------")
 	GetPod(ctx, client, "default", "stress-pod")
@@ -26,19 +24,23 @@ func TestDeployment(t *testing.T) {
 	fmt.Println("-----------------------------------------------")
 	CreateDeploymentService(ctx, client, "default", 3, "nginx333333", 80)
 	fmt.Println("-----------------------------------------------")
-	CreateNamespace(ctx, client, "create-test")
-}
-
-func TestWatchDeployment(t *testing.T) {
-
-	ctx := context.Background()
-	client, err := GetClientSet()
-	if err != nil {
-		log.Println(err)
-	}
-
+	//CreateNamespace(ctx, client, "create-test")
 	fmt.Println("-----------------------------------------------")
-	WatchDeployment(ctx, client, "default", time.Duration(time.Minute * 1))
 
+	// TODO: 记录一下，重复调用GetClientSet()好像会报错，需要用func init() 来执行 进行初始化
+	WatchDeployment(ctx, client, "default", time.Duration(time.Minute * 1))
 }
+
+//func TestWatchDeployment(t *testing.T) {
+//
+//	//ctx := context.Background()
+//	//client, err := GetClientSet()
+//	//if err != nil {
+//	//	log.Println(err)
+//	//}
+//	//
+//	//fmt.Println("-----------------------------------------------")
+//	//WatchDeployment(ctx, client, "default", time.Duration(time.Minute * 1))
+//
+//}
 
