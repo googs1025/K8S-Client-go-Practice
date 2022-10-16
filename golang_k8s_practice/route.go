@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"k8s_practice_client_go/golang_k8s_practice/handler"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"golang_k8s_practice/handler"
 )
 
 func register(router *gin.Engine) {
@@ -13,40 +15,51 @@ func register(router *gin.Engine) {
 			deployment := k8s_operation.Group("deployment")
 			{
 				deployment.GET("", handler.ListDeployment)
-				deployment.GET("/:deploymentName", handler.GetDeployment)
-				deployment.POST()
-				deployment.DELETE()
+				deployment.GET("/:deploymentName/:namespace", handler.GetDeployment)
+				deployment.DELETE("/:deploymentName/:namespace", handler.DeleteDeployment)
+				//deployment.POST()
+				//deployment.DELETE()
 
 			}
 
 			namespace := api.Group("namespace")
 			{
-				namespace.GET()
-				namespace.GET()
-				namespace.POST()
-				namespace.DELETE()
+				namespace.GET("", handler.ListNamespace)
+				//namespace.GET()
+				//namespace.POST()
+				//namespace.DELETE()
 			}
-
+		//
 			service := api.Group("service")
 			{
-				//service.GET()
+				service.GET("", handler.ListService)
 				//service.GET()
 				//service.POST()
 				//service.DELETE()
 			}
-
+		//
 			pod := api.Group("pod")
 			{
-				pod.GET()
-				pod.GET()
-				pod.POST()
-				pod.DELETE()
+				pod.GET("", handler.ListPod)
+				pod.GET("/:podName", handler.GetPod)
+				//pod.POST()
+				//pod.DELETE()
 			}
-
-
+		//
+		//
 		}
 
 
 	}
+
+	api.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+
+	//swagger
+	api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 
 }

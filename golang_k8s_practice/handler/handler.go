@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"k8s_practice_client_go/golang_k8s_practice/common/api"
+	"golang_k8s_practice/common/api"
 	"net/http"
 )
 

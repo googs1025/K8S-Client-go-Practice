@@ -1,0 +1,75 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {},
+        "license": {
+            "name": "aaa"
+        },
+        "version": "",
+        "title": ""
+    },
+    "paths": {
+        "/k8s_operation/deployment": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取deployment列表",
+                "responses": {
+                    "200": {
+                        "description": "成功后返回",
+                        "schema": {
+                            "$ref": "#/definitions/model.DeploymentList"
+                        }
+                    }
+                }
+            }
+        },
+        "/k8s_operation/deployment/:deploymentName": {
+            "get": {
+                "summary": "获取特定deployment",
+                "responses": {
+                    "200": {
+                        "description": "成功后返回deployment名",
+                        "schema": {
+                            "$ref": "#/definitions/model.DeploymentGet"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.DeploymentGet": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "namespace": {
+                    "type": "string"
+                },
+                "replicas": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.DeploymentList": {
+            "type": "object",
+            "properties": {
+                "deploymentGetlist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.DeploymentGet"
+                    }
+                },
+                "err": {
+
+                }
+            }
+        }
+    }
+}

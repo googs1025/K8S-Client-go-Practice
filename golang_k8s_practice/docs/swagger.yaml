@@ -1,0 +1,44 @@
+definitions:
+  model.DeploymentGet:
+    properties:
+      name:
+        type: string
+      namespace:
+        type: string
+      replicas:
+        type: integer
+    type: object
+  model.DeploymentList:
+    properties:
+      deploymentGetlist:
+        items:
+          $ref: '#/definitions/model.DeploymentGet'
+        type: array
+      err:
+        type: error
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /k8s_operation/deployment:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功后返回
+          schema:
+            $ref: '#/definitions/model.DeploymentList'
+      summary: 获取deployment列表
+  /k8s_operation/deployment/:deploymentName:
+    get:
+      responses:
+        "200":
+          description: 成功后返回deployment名
+          schema:
+            $ref: '#/definitions/model.DeploymentGet'
+      summary: 获取特定deployment
+swagger: "2.0"

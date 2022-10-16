@@ -3,15 +3,16 @@ package deployment
 import (
 	"context"
 	"fmt"
+	"golang_k8s_practice/client"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 	"log"
 )
 
-func DeleteDeployment(ctx context.Context, client *kubernetes.Clientset, deployname string, namespace string) {
+func DeleteDeployment(deployname string, namespace string) error {
 
-	err := client.AppsV1().Deployments(namespace).Delete(ctx, deployname, metav1.DeleteOptions{})
+	ctx := context.Background()
+	err := client.K8sClient.AppsV1().Deployments(namespace).Delete(ctx, deployname, metav1.DeleteOptions{})
 	if err != nil {
 		if errors.IsNotFound(err) {
 			log.Println(err)
@@ -24,6 +25,7 @@ func DeleteDeployment(ctx context.Context, client *kubernetes.Clientset, deployn
 		fmt.Printf("deployment: %s 已经删除", deployname)
 	}
 
+	return err
 
 }
 

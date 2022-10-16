@@ -3,53 +3,55 @@ package deployment
 import (
 	"context"
 	"fmt"
+	"golang_k8s_practice/client"
+	"golang_k8s_practice/model"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 	"log"
 )
 
-func GetPodsList(ctx context.Context, client *kubernetes.Clientset, namespace string) {
+func ListDeployment(namespace string) (*model.DeploymentList, error) {
+	ctx := context.Background()
+	deployments, err := client.K8sClient.AppsV1().Deployments(namespace).List(ctx, metav1.ListOptions{})
 
-	pods, err := client.CoreV1().Pods(namespace).List(ctx, metav1.ListOptions{})
 	if err != nil {
+		data := &model.DeploymentList{
+			Err: err,
+		}
 		log.Println(err)
+		return data, err
+
 	}
 
-	for _, pod := range pods.Items {
-		fmt.Printf("Namespace: %v\t Name: %v\t Status: %+v\n", pod.Namespace, pod.Name, pod.Status.Phase)
+	data := &model.DeploymentList{
+		DeploymentGetlist: make([]*model.DeploymentGet, len(deployments.Items)),
+		Err: nil,
 	}
 
-}
-
-func GetDeploymentList(ctx context.Context, client *kubernetes.Clientset, namespace string) {
-
-	deployments, err := client.AppsV1().Deployments(namespace).List(ctx, metav1.ListOptions{})
-	if err != nil {
-		log.Println(err)
-	}
-
-	for _, d := range deployments.Items {
+	for i, d := range deployments.Items {
+		data.DeploymentGetlist[i].Namespace = d.Namespace
+		data.DeploymentGetlist[i].Name = d.Name
+		data.DeploymentGetlist[i].Replicas = *d.Spec.Replicas
 		fmt.Printf("Namespace: %v\t Name: %v\t Status: %+v\n", d.Namespace, d.Name, d.Status)
 	}
-
+	return data, nil
 }
 
-func GetPod(ctx context.Context, client *kubernetes.Clientset, namespace string, podname string) {
-	pod, err := client.CoreV1().Pods(namespace).Get(ctx, podname, metav1.GetOptions{})
+func GetDeployment(namespace string, deployName string) (*model.DeploymentGet, error) {
+
+	ctx := context.Background()
+	data := &model.DeploymentGet{}
+	deployment, err := client.K8sClient.AppsV1().Deployments(namespace).Get(ctx, deployName, metav1.GetOptions{})
 	if err != nil {
 		log.Println(err)
-	}
-	fmt.Println("取到pod", pod.Name)
-}
-
-func GetDeployment(ctx context.Context, client *kubernetes.Clientset, namespace string, deployname string) {
-
-	deployment, err := client.AppsV1().Deployments(namespace).Get(ctx, deployname, metav1.GetOptions{})
-	if err != nil {
-		log.Println(err)
+		return data, err
 	}
 
 	fmt.Println("取到deployment", deployment.Name)
+	data.Name = deployment.Name
+	data.Namespace = deployment.Namespace
+	data.Replicas = *deployment.Spec.Replicas
+
+	return data, nil
 
 }
 
