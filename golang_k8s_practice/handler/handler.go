@@ -29,6 +29,7 @@ func sendResponse(c *gin.Context, result *api.Result) {
 
 }
 
+
 func Response(c *gin.Context, data interface{}, err error) {
 	if err != nil {
 		Fail(c, err)

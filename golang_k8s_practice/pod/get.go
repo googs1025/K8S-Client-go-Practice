@@ -39,14 +39,17 @@ func ListPod(namespace string) (*model.PodList, error) {
 	}
 
 	data := &model.PodList{
-		PodGetlist: make([]*model.PodGet, len(pods.Items)),
+		PodGetlist: make([]*model.PodGet, 0),
 		Err: nil,
 	}
 
-	for i, d := range pods.Items {
-		data.PodGetlist[i].Namespace = d.Namespace
-		data.PodGetlist[i].Name = d.Name
-		data.PodGetlist[i].ContainerNum = len(d.Spec.Containers)
+	for _, d := range pods.Items {
+		pod := &model.PodGet{
+			Name: d.Name,
+			Namespace: d.Namespace,
+			ContainerNum: len(d.Spec.Containers),
+		}
+		data.PodGetlist = append(data.PodGetlist, pod)
 		fmt.Printf("Namespace: %v\t Name: %v\t Status: %+v\n", d.Namespace, d.Name, d.Status)
 	}
 	return data, nil

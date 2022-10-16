@@ -23,14 +23,18 @@ func ListDeployment(namespace string) (*model.DeploymentList, error) {
 	}
 
 	data := &model.DeploymentList{
-		DeploymentGetlist: make([]*model.DeploymentGet, len(deployments.Items)),
+		DeploymentGetlist: make([]*model.DeploymentGet, 0),
 		Err: nil,
 	}
 
-	for i, d := range deployments.Items {
-		data.DeploymentGetlist[i].Namespace = d.Namespace
-		data.DeploymentGetlist[i].Name = d.Name
-		data.DeploymentGetlist[i].Replicas = *d.Spec.Replicas
+	for _, d := range deployments.Items {
+		deploy := &model.DeploymentGet{
+			Name: d.Name,
+			Namespace: d.Namespace,
+			Replicas: *d.Spec.Replicas,
+
+		}
+		data.DeploymentGetlist = append(data.DeploymentGetlist, deploy)
 		fmt.Printf("Namespace: %v\t Name: %v\t Status: %+v\n", d.Namespace, d.Name, d.Status)
 	}
 	return data, nil

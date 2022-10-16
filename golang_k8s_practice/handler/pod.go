@@ -5,6 +5,7 @@ import (
 	"golang_k8s_practice/pod"
 )
 
+
 func GetPod(c *gin.Context) {
 
 	namespace := c.Param("namespace")
@@ -23,6 +24,7 @@ func ListPod(c *gin.Context) {
 	resList, err := pod.ListPod(namespace)
 	if err != nil {
 		Fail(c, err)
+		return
 	}
 	Response(c, resList, nil)
 }

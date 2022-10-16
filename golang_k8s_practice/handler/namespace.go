@@ -9,10 +9,12 @@ func GetNamespace(c *gin.Context) {
 
 }
 
+
 func ListNamespace(c *gin.Context) {
 	nsList, err := namespace.ListNamespace()
 	if err != nil {
 		Fail(c, err)
+		return
 	}
 	Response(c, nsList, nil)
 }

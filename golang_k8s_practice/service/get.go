@@ -9,6 +9,7 @@ import (
 	"fmt"
 )
 
+
 func ListService(namespace string) (*model.ServiceList, error) {
 	ctx := context.Background()
 	services, err := client.K8sClient.CoreV1().Services(namespace).List(ctx, metav1.ListOptions{})
@@ -20,15 +21,18 @@ func ListService(namespace string) (*model.ServiceList, error) {
 		return data, err
 	}
 	data := &model.ServiceList{
-		Services: make([]*model.ServiceGet, len(services.Items)),
+		Services: make([]*model.ServiceGet, 0),
 		Err: nil,
 	}
 
-	for i, d := range services.Items {
-		data.Services[i].Name = d.Name
-		data.Services[i].Port = d.Spec.Ports[0].Port
-		data.Services[i].Type = d.TypeMeta.Kind
-		data.Services[i].ClusterIp = d.Spec.ClusterIP
+	for _, d := range services.Items {
+		svc := &model.ServiceGet{
+			Name: d.Name,
+			Port: d.Spec.Ports[0].Port,
+			Type: d.TypeMeta.Kind,
+			ClusterIp: d.Spec.ClusterIP,
+		}
+		data.Services = append(data.Services, svc)
 		fmt.Printf("Service Name: %v\t Port: %v\t Type: %+v\t ClusterIp: %v\t", d.Namespace, d.Name, d.Status, d.Spec.ClusterIP)
 	}
 

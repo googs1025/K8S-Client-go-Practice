@@ -5,6 +5,7 @@ type ServiceList struct {
 	Err               error
 }
 
+
 type ServiceGet struct {
 	Name      string
 	Type      string

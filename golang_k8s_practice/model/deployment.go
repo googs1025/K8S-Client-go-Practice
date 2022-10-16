@@ -5,6 +5,7 @@ type DeploymentList struct {
 	Err               error
 }
 
+
 type DeploymentGet struct {
 	Name 	  string
 	Namespace string

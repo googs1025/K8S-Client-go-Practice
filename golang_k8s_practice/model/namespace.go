@@ -5,6 +5,7 @@ type NamespaceList struct {
 	Err               error
 }
 
+
 type NamespacePhase string
 
 type NamespaceGet struct {

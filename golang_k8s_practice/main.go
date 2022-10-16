@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-const port = ":8000"
+const port = ":8080"
 
 func main() {
 
@@ -31,12 +31,13 @@ func main() {
 
 	// 启动server
 	defer func() {
-		server := fmt.Sprintf("服务对外端口:%d",port)
+		server := fmt.Sprintf("服务对外端口%v",port)
 		fmt.Println(server)
 		_ = router.Run(port)
 	}()
 
-	_ = router.SetTrustedProxies(nil)
+
+	//_ = router.SetTrustedProxies(nil)
 
 	register(router)
 

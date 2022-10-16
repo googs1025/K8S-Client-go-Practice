@@ -13,12 +13,14 @@ import (
 // @Produce  json
 // @Success 200  object model.DeploymentList "成功后返回"
 // @Router /k8s_operation/deployment [get]
+
 func ListDeployment(c *gin.Context) {
 
 	namespace := c.Param("namespace")
 	resList, err := deployment.ListDeployment(namespace)
 	if err != nil {
 		Fail(c, err)
+		return
 	}
 	Response(c, resList, nil)
 
@@ -37,6 +39,7 @@ func GetDeployment(c *gin.Context)  {
 	res, err := deployment.GetDeployment(namespace, deploymentName)
 	if err != nil {
 		Fail(c, err)
+		return
 	}
 	Response(c, res, nil)
 
@@ -53,6 +56,7 @@ func DeleteDeployment(c *gin.Context) {
 	err := deployment.DeleteDeployment(deploymentName, namespace)
 	if err != nil {
 		Fail(c, err)
+		return
 	}
 	Response(c, nil, nil)
 }
