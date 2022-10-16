@@ -14,7 +14,7 @@ func register(router *gin.Engine) {
 			{
 				deployment.GET("/:namespace", handler.ListDeployment)
 				// FIXME: Get 需要重新写
-				//deployment.GET("/:deploymentName/:namespace", handler.GetDeployment)
+				deployment.GET("", handler.GetDeployment)
 				//deployment.DELETE("/:deploymentName/:namespace", handler.DeleteDeployment)
 
 			}

@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"golang_k8s_practice/deployment"
+	"log"
 )
 
 
@@ -13,6 +14,7 @@ import (
 // @Produce  json
 // @Success 200  object model.DeploymentList "成功后返回"
 // @Router /k8s_operation/deployment [get]
+
 
 func ListDeployment(c *gin.Context) {
 
@@ -31,12 +33,20 @@ func ListDeployment(c *gin.Context) {
 // @version 1.0
 // @Success 200  object model.DeploymentGet "成功后返回deployment名"
 // @Router /k8s_operation/deployment/:deploymentName [get]
+
+type DeploymentGetRequest struct {
+	Namespace  string "json:namespace"
+	Deployment string "json:deployment"
+}
+
 func GetDeployment(c *gin.Context)  {
 
-	namespace := c.Param("namespace")
-	deploymentName := c.Param("deploymentName")
-
-	res, err := deployment.GetDeployment(namespace, deploymentName)
+	var deploymentGetRequest DeploymentGetRequest
+	err := c.ShouldBindJSON(&deploymentGetRequest)
+	if err != nil {
+		log.Println(err)
+	}
+	res, err := deployment.GetDeployment(deploymentGetRequest.Namespace, deploymentGetRequest.Deployment)
 	if err != nil {
 		Fail(c, err)
 		return
