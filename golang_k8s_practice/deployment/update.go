@@ -8,9 +8,9 @@ import (
 	"log"
 )
 
-func UpdateDeploymentImage(ctx context.Context, client *kubernetes.Clientset, deployname string, namespace string, image string) {
+func UpdateDeploymentImage(ctx context.Context, client *kubernetes.Clientset, deployName string, namespace string, image string) {
 
-	deployment, err := client.AppsV1().Deployments(namespace).Get(ctx, deployname, metav1.GetOptions{})
+	deployment, err := client.AppsV1().Deployments(namespace).Get(ctx, deployName, metav1.GetOptions{})
 	if err != nil {
 		log.Println(err)
 	}
@@ -23,8 +23,8 @@ func UpdateDeploymentImage(ctx context.Context, client *kubernetes.Clientset, de
 	fmt.Println("deployment image已更新完成!")
 }
 
-func UpdateDeploymentReplica(ctx context.Context, client *kubernetes.Clientset, deployname string, namespace string, replicas int32) {
-	deployment, err := client.AppsV1().Deployments(namespace).Get(ctx, deployname, metav1.GetOptions{})
+func UpdateDeploymentReplica(ctx context.Context, client *kubernetes.Clientset, deployName string, namespace string, replicas int32) {
+	deployment, err := client.AppsV1().Deployments(namespace).Get(ctx, deployName, metav1.GetOptions{})
 	if err != nil {
 		log.Println(err)
 	}
