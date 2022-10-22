@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"golang_k8s_practice/client"
 
 	//apiv1 "k8s.io/api/core/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -24,14 +25,11 @@ func main() {
 	config.GroupVersion = &corev1.SchemeGroupVersion
 	config.NegotiatedSerializer = scheme.Codecs
 
-	restClient, err := rest.RESTClientFor(config)
-	if err != nil {
-		panic(err)
-	}
+
 
 	result := &corev1.PodList{}
 
-	err = restClient.Get().Namespace("default").Resource("pods").VersionedParams(&metav1.ListOptions{}, scheme.ParameterCodec).Do(context.TODO()).Into(result)
+	err = client.RestClient.Get().Namespace("default").Resource("pods").VersionedParams(&metav1.ListOptions{}, scheme.ParameterCodec).Do(context.TODO()).Into(result)
 	if err != nil {
 		panic(err)
 	}
