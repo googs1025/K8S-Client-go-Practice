@@ -2,6 +2,7 @@ package client
 
 import (
 	"flag"
+	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"log"
@@ -11,6 +12,7 @@ import (
 
 
 var K8sClient *kubernetes.Clientset
+var DynamicClient dynamic.Interface
 
 func init() {
 	var kubeConfig *string
@@ -32,6 +34,13 @@ func init() {
 		return
 	}
 	K8sClient = clientSet
+
+	dynamicClient, err := dynamic.NewForConfig(config)
+	if err != nil {
+		return
+	}
+	DynamicClient = dynamicClient
+
 }
 
 func HomeDir() string {
