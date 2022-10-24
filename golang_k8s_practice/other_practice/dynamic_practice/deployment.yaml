@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment-aaaaa
+  name: nginx-deployment-dynamic-create
   namespace: default
   labels:
     app: web

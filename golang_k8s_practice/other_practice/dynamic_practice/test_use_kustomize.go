@@ -24,6 +24,6 @@ func kustomize(path string) string {
 }
 
 
-func main() {
-
-}
+//func main() {
+//
+//}

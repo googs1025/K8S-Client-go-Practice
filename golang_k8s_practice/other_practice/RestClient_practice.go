@@ -29,7 +29,12 @@ func main() {
 
 	result := &corev1.PodList{}
 
-	err = client.RestClient.Get().Namespace("default").Resource("pods").VersionedParams(&metav1.ListOptions{}, scheme.ParameterCodec).Do(context.TODO()).Into(result)
+	err = client.RestClient.Get().
+		Namespace("default").
+		Resource("pods").
+		VersionedParams(&metav1.ListOptions{}, scheme.ParameterCodec).
+		Do(context.TODO()).
+		Into(result)
 	if err != nil {
 		panic(err)
 	}

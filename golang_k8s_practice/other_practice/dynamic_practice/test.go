@@ -12,6 +12,10 @@ import (
 	"log"
 )
 
+/*
+	使用yaml文件，创建deployment。
+ */
+
 //go:embed deployment.yaml
 var deploy_tpl string
 
@@ -31,7 +35,9 @@ func main() {
 		log.Println("unmarshal err:", err)
 	}
 	fmt.Println(deploy_tpl)
-	_, err = client.DynamicClient.Resource(deployGVR).Namespace(deployObj.GetNamespace()).Create(context.Background(), deployObj, metav1.CreateOptions{})
+	_, err = client.DynamicClient.Resource(deployGVR).
+		Namespace(deployObj.GetNamespace()).
+		Create(context.Background(), deployObj, metav1.CreateOptions{})
 
 	if err != nil {
 		log.Println("create err:", err)
